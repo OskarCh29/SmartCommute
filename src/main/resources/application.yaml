@@ -1,0 +1,7 @@
+spring:
+  main:
+    banner-mode: false
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/history
+
