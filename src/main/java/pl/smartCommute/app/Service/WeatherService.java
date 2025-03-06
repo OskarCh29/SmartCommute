@@ -21,4 +21,16 @@ public class WeatherService {
                 .onStatus(HttpStatusCode::isError,clientResponse -> Mono.error(new RuntimeException("Api error")))
                 .bodyToMono(String.class);
     }
+    public Mono<String> getWeatherForecast(String location){
+        String trimmedLocation = location.trim();
+        return webClient.get().uri(uriBuilder -> uriBuilder
+                .queryParam("q",trimmedLocation)
+                .queryParam("days","1")
+                .queryParam("aqi",true)
+                .queryParam("alerts",true)
+                .build())
+                .retrieve()
+                .onStatus(HttpStatusCode::isError,clientResponse -> Mono.error(new RuntimeException("Forecast error")))
+                .bodyToMono(String.class);
+    }
 }

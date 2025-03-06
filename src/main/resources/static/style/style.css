@@ -1,0 +1,54 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+#map {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: calc(100% - 300px);
+}
+
+#weather-info {
+    background-color: rgb(34, 69, 243);
+    padding: 20px;
+    color: #fff;
+    text-align: center;
+}
+
+#weather-info .location {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#weather-info .date {
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+#weather-info .hourly {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    font-size: 14px;
+}
+
+#weather-info .hourly div {
+    background-color: #1a4e8c;
+    padding: 10px;
+    border-radius: 4%;
+    text-align: center;
+}
+
+#weather-info .hourly div h4 {
+    margin: 0;
+    font-size: 12px;
+}
+
+#weather-info .hourly div p {
+    margin: 5px 0;
+}
