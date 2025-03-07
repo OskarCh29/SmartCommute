@@ -9,7 +9,7 @@ body {
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: calc(100% - 300px);
+    height: calc(100% - 200px);
 }
 
 #weather-info {
@@ -29,7 +29,7 @@ body {
     margin-top: 10px;
 }
 
-#weather-info .hourly {
+#weather-info .info {
     margin-top: 20px;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -37,18 +37,22 @@ body {
     font-size: 14px;
 }
 
-#weather-info .hourly div {
+#weather-info .info div {
     background-color: #1a4e8c;
     padding: 10px;
     border-radius: 4%;
     text-align: center;
 }
 
-#weather-info .hourly div h4 {
+#weather-info .info div h4 {
     margin: 0;
     font-size: 12px;
 }
 
-#weather-info .hourly div p {
+#weather-info .info div p {
     margin: 5px 0;
 }
+#weather-data .data div{
+    background-color: rgb(34, 69, 243);
+}
+#

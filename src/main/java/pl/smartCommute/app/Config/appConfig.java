@@ -8,11 +8,18 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 public class appConfig {
 
-    @Value("${weather.url}")
+    @Value("${weather.current}")
     private String weatherApiUrl;
 
+    @Value("${weather.forecast}")
+    private String weatherForecastUrl;
+
     @Bean
-    public WebClient webClientSetUp() {
+    public WebClient weatherWebClient() {
         return WebClient.builder().baseUrl(weatherApiUrl).build();
+    }
+    @Bean
+    public WebClient forecastWebClient(){
+        return WebClient.builder().baseUrl(weatherForecastUrl).build();
     }
 }
