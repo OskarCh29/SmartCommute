@@ -17,9 +17,9 @@ function getWeatherForecast(cords){
     });
 }
 function insertForecast(forecast){
-    const data = new Date();
+    const today = new Date();
     document.getElementById('location').textContent = forecast.location.name;
-    document.getElementById('date').textContent = "Date:" + data.toLocaleDateString;
+    document.getElementById('date').textContent = "Today:" + today.toLocaleDateString();
     const tableBody=$('#forecast')
     tableBody.empty();
     const hourlyData = forecast.forecast.forecastday[0].hour;
