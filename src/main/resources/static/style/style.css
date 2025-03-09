@@ -55,3 +55,24 @@ body {
 #weather-data .data div{
     background-color: rgb(34, 69, 243);
 }
+.weather-conteiner{
+    text-align: center;
+    margin-top: 30px;
+}
+#forecast-table{
+    margin: 30px auto;
+}
+#forecast-table th, #forecast-table td{
+    padding: 10px;
+    text-align: center;
+    border: 1px solid rgb(0, 0, 0);
+}
+button{
+    cursor: pointer;
+}
+#back{
+    padding: 10px;
+}
+#saveForecast{
+    padding: 10px;
+}

@@ -15,7 +15,7 @@ $(document).ready(function () {
             getUserLocation(function (latitude, longitude) {
                 initMapWithUserLocation(apiKey, latitude, longitude);
                 initWeather(latitude + "," + longitude);
-                initDailyForecast(latitude + "," + longitude);
+                getForecast(latitude + "," + longitude)
             });
         })
         .catch(error => console.error("No API KEY PROVIDED", error));
@@ -38,6 +38,7 @@ function initMapWithUserLocation(apiKey, lat, lng) {
 
     var ui = H.ui.UI.createDefault(map, defaultLayers);
     var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+
 }
 
 function initWeather(coordinates) {
@@ -48,6 +49,7 @@ function initWeather(coordinates) {
         data: { location: coordinates },
         success: function (response) {
             getWeatherFromLocation(response);
+            sessionStorage.setItem(location,response.location.name);
         },
         error: function (xhr, status, error) {
             console.error("Error:", status, error);
@@ -82,3 +84,54 @@ function getCurrentTime() {
     const currentDate = new Date();
     document.getElementById('date').textContent = "Date & Time: " + currentDate.toLocaleString();
 }
+function getForecast(location) {
+
+    $.ajax({
+        type: "GET",
+        url: "/weather/forecast",
+        data: { location: location },
+        dataType: "json",
+        success: function (response) {
+            console.log(response);
+            saveForecast(response);
+        }, error: function (xhr, status, error) {
+            console.error("Error loading forecast:", status, error);
+        }
+    });
+    function saveForecast(response) {
+        
+        const forecast = {
+            date: response.forecast.forecastday[1].date,
+            location:response.location.name,
+            forecast:response.forecast.forecastday[1].hour.map(hourData =>{
+                return{
+                    hour:hourData.time,
+                    temperature:Math.round(hourData.temp_c),
+                    pressure: Math.round(hourData.pressure_mb),
+                    wind: Math.round(hourData.wind_kph),
+                    cloud: hourData.cloud,
+                    rain: hourData.chance_of_rain,
+                    humidity: hourData.humidity
+                };
+            })
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/weather/forecast",
+            data: JSON.stringify(forecast),
+            dataType: "json",
+            contentType: "application/json",
+            success: function (response) {
+                alert(response.message);
+            },
+            error: function (error) {
+                alert("Error encountered while saving forecast")
+            }
+
+        });
+    }
+}
+
+
+

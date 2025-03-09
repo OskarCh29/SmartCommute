@@ -1,53 +1,45 @@
 $(document).ready(function () {
-    getUserLocation(function(latitude,longitude){
-        getWeatherForecast(latitude + "," + longitude)
+    $("#back").click(function (e) {
+        window.location.href = "/index.html"
+        e.preventDefault();
     });
+    var date = new Date();
+    date.setDate(date.getDate() + 1);
+    const formattedDate = date.toISOString().split("T")[0];
+    let location = sessionStorage.getItem(location);
+    getForecast(lo, formattedDate);
 });
-function getWeatherForecast(cords){
+function getForecast(location, date) {
     $.ajax({
         type: "GET",
-        url: "/weather/forecast",
-        data: {location:cords},
+        url: `/forecast/${location}/${date}`,
         dataType: "json",
         success: function (response) {
-            insertForecast(response);
-        },error: function (xhr, status, error) {
-            console.error("Error loading forecast:", status, error);
+            insertForecast(response)
+        }, error: function (error) {
+            alert("No forecast found")
         }
     });
 }
-function insertForecast(forecast){
-    const today = new Date();
-    document.getElementById('location').textContent = forecast.location.name;
-    document.getElementById('date').textContent = "Today:" + today.toLocaleDateString();
-    const tableBody=$('#forecast')
+function insertForecast(forecast) {
+    document.getElementById('location').textContent = forecast.location;
+    document.getElementById('date').textContent = forecast.date
+    
+    const tableBody = $('#forecast tbody')
     tableBody.empty();
-    const hourlyData = forecast.forecast.forecastday[0].hour;
+
+    const hourlyData = forecast.forecast
 
     hourlyData.forEach(hour => {
         const row = $('<tr></tr>');
         const formattedDate = hour.time.split(" ")[1];
         row.append(`<td>${formattedDate}</td>`);
-        row.append(`<td>${hour.temp_c} °C</td>`);
-        row.append(`<td>${hour.pressure_mb} hPa</td>`);
-        row.append(`<td>${hour.wind_kph} km/h</td>`);
+        row.append(`<td>${hour.temperature} °C</td>`);
+        row.append(`<td>${hour.pressure} hPa</td>`);
+        row.append(`<td>${hour.wind} km/h</td>`);
         row.append(`<td>${hour.cloud} %</td>`);
-        row.append(`<td>${hour.chance_of_rain} %</td>`);
+        row.append(`<td>${hour.rain} %</td>`);
         row.append(`<td>${hour.humidity} %</td>`);
         tableBody.append(row);
     });
-}
-function getUserLocation(callback) {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            let latitude = position.coords.latitude;
-            let longitude = position.coords.longitude;
-            callback(latitude, longitude);
-        }, function (error) {
-            console.error("Cannot load location", error);
-            alert("Cannot load user location");
-        });
-    } else {
-        console.log("Geolocation not supported by this browser");
-    }
 }

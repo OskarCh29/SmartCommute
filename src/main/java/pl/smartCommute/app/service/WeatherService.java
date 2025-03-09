@@ -1,4 +1,4 @@
-package pl.smartCommute.app.Service;
+package pl.smartCommute.app.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,7 +35,7 @@ public class WeatherService {
                         .path("/v1/forecast.json")
                         .queryParam("key",API_KEY)
                         .queryParam("q", trimmedLocation)
-                        .queryParam("days", "1")
+                        .queryParam("days", "2")
                         .queryParam("aqi", false)
                         .queryParam("alerts", true)
                         .build())
