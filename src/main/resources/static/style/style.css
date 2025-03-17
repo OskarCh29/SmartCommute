@@ -9,7 +9,7 @@ body {
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: calc(100% - 200px);
+    height: calc(100% - 220px);
 }
 
 #weather-info {
@@ -32,7 +32,7 @@ body {
 #weather-info .info {
     margin-top: 20px;
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: 10px;
     font-size: 14px;
 }
@@ -75,4 +75,12 @@ button{
 }
 #saveForecast{
     padding: 10px;
+}
+.pred{
+    text-align: left;
+    font-size: 12px ;
+    margin: 0px;
+    padding: 0px;
+    font-weight: bold;
+    
 }

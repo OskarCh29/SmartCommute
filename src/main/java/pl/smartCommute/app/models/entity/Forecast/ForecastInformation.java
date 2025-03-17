@@ -1,5 +1,6 @@
 package pl.smartCommute.app.models.entity.Forecast;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties
 public class ForecastInformation {
     @NotNull(message = "Hour cannot be null")
     @NotBlank(message = "Hour cannot be blank")
@@ -31,4 +33,7 @@ public class ForecastInformation {
 
     @NotNull(message = "Humidity cannot be null")
     private int humidity;
+
+    @NotNull(message = "Feels like cannot be null")
+    private int feelsLike;
 }
