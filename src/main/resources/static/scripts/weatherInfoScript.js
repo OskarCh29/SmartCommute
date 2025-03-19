@@ -1,3 +1,10 @@
+/*
+Providing access to API by KEY located in config.json
+Example:
+{
+  "API_KEY": "YOUR KEY"
+}
+*/
 $(document).ready(function () {
     fetch('/config.json')
         .then(response => {
@@ -15,7 +22,7 @@ $(document).ready(function () {
             getUserLocation(function (latitude, longitude) {
                 initMapWithUserLocation(apiKey, latitude, longitude);
                 initWeather(latitude + "," + longitude);
-                getForecast(latitude + "," + longitude)
+                getForecast(latitude + "," + longitude);
             });
         })
         .catch(error => console.error("No API KEY PROVIDED", error));
@@ -27,20 +34,42 @@ function initMapWithUserLocation(apiKey, lat, lng) {
     });
     var defaultLayers = platform.createDefaultLayers();
 
+    var mapZoom = sessionStorage.getItem("mapZoom");
+    let mapCenter = sessionStorage.getItem("mapCenter");
+
+    var zoom = mapZoom ? parseInt(mapZoom) : 12;
+    var center = mapCenter ? JSON.parse(mapCenter) : { lat: lat, lng: lng };
+
+
     var map = new H.Map(
         document.getElementById('map'),
         defaultLayers.vector.normal.map,
         {
-            zoom: 12,
-            center: { lat: lat, lng: lng }
+            zoom: zoom,
+            center: center
         }
     );
 
     var ui = H.ui.UI.createDefault(map, defaultLayers);
     var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
 
-}
+    map.addEventListener('dbltap', function (evt) {
+        var pointer = evt.currentPointer;
+        if (!pointer) return;
+        var coords = map.screenToGeo(pointer.viewportX, pointer.viewportY);
+        console.log("Coords:" + coords.lat, coords.lng);
+        initWeather(coords.lat + "," + coords.lng);
+        getForecast(coords.lat + "," + coords.lng);
 
+    });
+    map.addEventListener('drag', function () {
+        var center = map.getCenter();
+        var zoom = map.getZoom();
+        sessionStorage.setItem("mapCenter", JSON.stringify({ lat: center.lat, lng: center.lng }));
+        sessionStorage.setItem("mapZoom", zoom);
+    });
+
+}
 function initWeather(coordinates) {
     $.ajax({
         type: "GET",
@@ -57,25 +86,17 @@ function initWeather(coordinates) {
     });
 }
 
-function getWeatherFromLocation(location) {
-    document.getElementById('location').textContent = location.location.name;
-    document.getElementById('temp').textContent = location.current.temp_c + " (°)"
-    document.getElementById('feelsLike').textContent = location.current.feelslike_c + " (°)"
-    document.getElementById('wind').textContent = location.current.wind_kph + " km/h"
-    document.getElementById('pressure').textContent = location.current.pressure_mb + " hPa"
-    document.getElementById('humidity').textContent = location.current.humidity + " %";
-    document.getElementById('cloud').textContent = location.current.cloud + " %";
+function getWeatherFromLocation(weather) {
+    document.getElementById('location').textContent = weather.location.name;
+    document.getElementById('temp').textContent = weather.current.temp_c + " °"
+    document.getElementById('feelsLike').textContent = weather.current.feelslike_c + " °"
+    document.getElementById('wind').textContent = weather.current.wind_kph + " km/h"
+    document.getElementById('pressure').textContent = weather.current.pressure_mb + " hPa"
+    document.getElementById('humidity').textContent = weather.current.humidity + " %";
+    document.getElementById('cloud').textContent = weather.current.cloud + " %";
 
-    const currentHour = new Date().getHours();
-    const currentLocation = location.location.name;
-    checkHistory(currentLocation, currentHour, function (temperatureYesterday) {
-        if (temperatureYesterday !== null) {
-            document.getElementById('yesterday').textContent =`Yesterday at this time was: ${temperatureYesterday}°`;
-        } else {
-            document.getElementById('yesterday').textContent = "";
-        }
-    })
-    document.getElementById('yesterday').textContent
+    const currentLocation = weather.location.name;
+    checkHistory(currentLocation)
 }
 function getUserLocation(callback) {
     if (navigator.geolocation) {
@@ -111,49 +132,37 @@ function getForecast(location) {
         }
     });
     function saveForecast(response) {
-        saveForDay(0);
-        saveForDay(1);
-        function saveForDay(dayIndex){
-            const forecast = {
-                date: response.forecast.forecastday[dayIndex].date,
-                location: response.location.name,
-                forecast: response.forecast.forecastday[dayIndex].hour.map(hourData => {
-                    return {
-                        hour: hourData.time,
-                        temperature: Math.round(hourData.temp_c),
-                        pressure: Math.round(hourData.pressure_mb),
-                        wind: Math.round(hourData.wind_kph),
-                        cloud: hourData.cloud,
-                        rain: hourData.chance_of_rain,
-                        humidity: hourData.humidity
-                    };
-                })
-            };
-    
+        response.forEach(dayForecast => {
             $.ajax({
                 type: "POST",
                 url: "/weather/forecast",
-                data: JSON.stringify(forecast),
+                data: JSON.stringify(dayForecast),
                 dataType: "json",
                 contentType: "application/json",
                 success: function (response) {
-                    alert(response.message);
+                    console.log(response.message);
                 },
-                error: function (error) {
+                error: function (response) {
                     alert("Error encountered while saving forecast")
                 }
-    
-            });
-        }
-        
-    }
-}
-function checkHistory(location, currentHour, callback) {
-    const currentTime = new Date();
-    const formattedDate = new Date(currentTime);
 
+            });
+        });
+    }
+
+}
+function checkHistory(location, callback) {
+    const currentTime = new Date();
+    const currentMinutes = currentTime.getMinutes();
+
+    let timeNow = currentTime.getHours();
+    if (currentMinutes >= 30) {
+        timeNow += 1;
+    }
+    const formattedDate = new Date(currentTime);
     formattedDate.setDate(formattedDate.getDate() - 1);
     const yesterdayDate = formattedDate.toISOString().split('T')[0];
+    console.log(timeNow)
 
     $.ajax({
         type: "GET",
@@ -161,32 +170,28 @@ function checkHistory(location, currentHour, callback) {
         dataType: "json",
         success: function (response) {
             console.log(response);
-            const temperatureYesterday = checkYesterdayTemperature(response, currentHour);
-            callback(temperatureYesterday);
+            checkYesterdayTemperature(response,timeNow);
 
-        }, error: function (xhr, status, error) {
-            console.error("Error encountered: ", status, error)
-            alert("Cannot load history weather data");
+        }, error: function () {
+            document.getElementById('yesterday').textContent = "";
         }
     });
 }
-function checkYesterdayTemperature(forecastResponse, currentHour) {
+function checkYesterdayTemperature(forecastResponse, timeNow) {
     const yesterdayForecast = forecastResponse.forecast;
 
-    const roundedCurrentHour = Math.round(currentHour);
-
     const closestHour = yesterdayForecast.find(hour => {
-        const forecastTime = new Date(hour.hour);
-        return forecastTime.getHours() === roundedCurrentHour;
-    });
+        const [forecastHour, forecastMinute] = hour.time.split(':').map(Number);
+        return forecastHour === timeNow
+    })
 
     if (closestHour) {
-        const temperatureYesterday = closestHour.temperature;
-        return temperatureYesterday;
+        const temperatureYesterday = closestHour.temp_c;
+        document.getElementById('yesterday').textContent = "Yesterday at this time was " + temperatureYesterday +" °" ;
+        
     } else {
         console.log("No forecast data available for the same time yesterday.");
-        alert("No forecast data available for the same time yesterday.");
-        return null;
+        document.getElementById('yesterday').textContent = "";
     }
 }
 

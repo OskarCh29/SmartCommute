@@ -7,10 +7,13 @@ $(document).ready(function () {
     date.setDate(date.getDate() + 1);
     let location = sessionStorage.getItem("location");
     let formattedDate = date.toISOString().split("T")[0];
+    console.log(location + ", Date:" + formattedDate);
     insertForecast(location, formattedDate);
 
 });
 function insertForecast(location, date) {
+    console.log(location);
+    console.log(date);
     $.ajax({
         type: "GET",
         url: `/weather/forecast/${location}/${date}`,
@@ -23,19 +26,21 @@ function insertForecast(location, date) {
             const tableBody = $('#forecast');
             tableBody.empty();
 
-            response.forecast.forEach(hour => {
+            response.forecast.forEach(forecast => {
                 const row = $('<tr></tr>');
-                const formattedDate = hour.hour.split(" ")[1];
-                row.append(`<td>${formattedDate}</td>`);
-                row.append(`<td>${hour.temperature} °C</td>`);
-                row.append(`<td>${hour.feelsLike} °C</td>`);
-                row.append(`<td>${hour.pressure} hPa</td>`);
-                row.append(`<td>${hour.wind} km/h</td>`);
-                row.append(`<td>${hour.cloud} %</td>`);
-                row.append(`<td>${hour.rain} %</td>`);
-                row.append(`<td>${hour.humidity} %</td>`);
+                row.append(`<td>${forecast.time}</td>`);
+                row.append(`<td>${forecast.temp_c} °C</td>`);
+                row.append(`<td>${forecast.feelslike_c} °C</td>`);
+                row.append(`<td>${forecast.pressure} hPa</td>`);
+                row.append(`<td>${forecast.wind_kph} km/h</td>`);
+                row.append(`<td>${forecast.cloud} %</td>`);
+                row.append(`<td>${forecast.chance_of_rain} %</td>`);
+                row.append(`<td>${forecast.humidity} %</td>`);
                 tableBody.append(row);
             });
+        }, error: function (xhr, status, error) {
+            console.error("Error:", status, error);
+            console.log(xhr.responseText);
         }
     })
 };

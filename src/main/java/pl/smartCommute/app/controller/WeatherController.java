@@ -8,9 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.smartCommute.app.models.entity.Forecast.Forecast;
 import pl.smartCommute.app.models.response.GeneralResponse;
+import pl.smartCommute.app.models.response.WeatherResponse;
 import pl.smartCommute.app.service.ForecastService;
 import pl.smartCommute.app.service.WeatherService;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/weather")
@@ -21,12 +24,12 @@ public class WeatherController {
     private final ForecastService forecastService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<String> getWeather(@RequestParam(required = true, defaultValue = "Warsaw") String location) {
+    public Mono<WeatherResponse> getWeather(@RequestParam(required = true, defaultValue = "Warsaw") String location) {
         return weatherService.getWeather(location);
     }
 
     @GetMapping(value = "/forecast", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<String> getWeatherForecast(@RequestParam(required = true, defaultValue = "Warsaw") String location) {
+    public Mono<List<Forecast>> getWeatherForecast(@RequestParam(required = true, defaultValue = "Warsaw") String location) {
         return weatherService.getWeatherForecast(location);
     }
 
