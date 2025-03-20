@@ -52,25 +52,28 @@ public class WeatherService {
                 .onStatus(HttpStatusCode::isError, clientResponse ->
                         Mono.error(new InternalServerException("Forecast error")))
                 .bodyToMono(ForecastResponse.class)
-                .map(response ->
-                        response.getForecast().getForecastday().stream()
-                                .map(forecastDay -> new Forecast(
-                                        null,
-                                        forecastDay.getDate(),
-                                        response.getLocation().getName(),
-                                        forecastDay.getHour().stream()
-                                                .map(hour -> new ForecastInformation(
-                                                        hour.getTime().split(" ")[1],
-                                                        hour.getTemp_c(),
-                                                        hour.getPressure_mb(),
-                                                        hour.getWind_kph(),
-                                                        hour.getCloud(),
-                                                        hour.getChance_of_rain(),
-                                                        hour.getHumidity(),
-                                                        hour.getFeelslike_c()
-                                                ))
-                                                .toList()
-                                )).toList());
+                .map(this::mapResponseToForecast);
 
+    }
+    private List<Forecast> mapResponseToForecast(ForecastResponse response) {
+        return response.getForecast().getForecastday().stream()
+                .map(forecastDay -> new Forecast(
+                        null,
+                        forecastDay.getDate(),
+                        response.getLocation().getName(),
+                        forecastDay.getHour().stream()
+                                .map(hour -> new ForecastInformation(
+                                        hour.getTime().split(" ")[1],
+                                        hour.getTemp_c(),
+                                        hour.getPressure_mb(),
+                                        hour.getWind_kph(),
+                                        hour.getCloud(),
+                                        hour.getChance_of_rain(),
+                                        hour.getHumidity(),
+                                        hour.getFeelslike_c()
+                                ))
+                                .toList()
+                ))
+                .toList();
     }
 }
