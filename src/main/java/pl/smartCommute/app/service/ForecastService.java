@@ -2,6 +2,7 @@ package pl.smartCommute.app.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.smartCommute.app.exception.RecordExistsException;
 import pl.smartCommute.app.models.entity.Forecast.Forecast;
 import pl.smartCommute.app.repository.ForecastRepository;
 
@@ -17,7 +18,7 @@ public class ForecastService {
 
     public Forecast saveForecast(Forecast forecast) {
         if (findByLocationAndDate(forecast.getLocation(), forecast.getDate()) != null) {
-            return null;
+            throw new RecordExistsException("Record exists - no need to save");
         }
         return forecastRepository.save(forecast);
     }

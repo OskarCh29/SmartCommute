@@ -28,13 +28,13 @@ function insertForecast(location, date) {
 
             response.forecast.forEach(forecast => {
                 const row = $('<tr></tr>');
-                row.append(`<td>${forecast.time}</td>`);
-                row.append(`<td>${forecast.temp_c} °C</td>`);
-                row.append(`<td>${forecast.feelslike_c} °C</td>`);
+                row.append(`<td>${forecast.hour}</td>`);
+                row.append(`<td>${forecast.temperature} °C</td>`);
+                row.append(`<td>${forecast.feelsLike} °C</td>`);
                 row.append(`<td>${forecast.pressure} hPa</td>`);
-                row.append(`<td>${forecast.wind_kph} km/h</td>`);
+                row.append(`<td>${forecast.wind} km/h</td>`);
                 row.append(`<td>${forecast.cloud} %</td>`);
-                row.append(`<td>${forecast.chance_of_rain} %</td>`);
+                row.append(`<td>${forecast.rain} %</td>`);
                 row.append(`<td>${forecast.humidity} %</td>`);
                 tableBody.append(row);
             });

@@ -19,6 +19,8 @@ public class WeatherResponse {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Location{
         private String name;
+        private String lat;
+        private String lon;
     }
     public static class CurrentWeather{
 

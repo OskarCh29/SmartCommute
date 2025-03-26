@@ -19,7 +19,8 @@ $(document).ready(function () {
             }
 
             const apiKey = config.API_KEY;
-            getUserLocation(function (latitude, longitude) {
+
+            getUserCoordinates(function (latitude, longitude) {
                 initMapWithUserLocation(apiKey, latitude, longitude);
                 initWeather(latitude + "," + longitude);
                 getForecast(latitude + "," + longitude);
@@ -27,6 +28,15 @@ $(document).ready(function () {
         })
         .catch(error => console.error("No API KEY PROVIDED", error));
 });
+function getUserCoordinates(callback){
+    let coords = sessionStorage.getItem("coords");
+    if(coords !== null){
+        let parsedCoords = JSON.parse(coords);
+        callback(parsedCoords.lat, parsedCoords.lng);
+    }else{
+        getUserLocation(callback);
+    }
+}
 
 function initMapWithUserLocation(apiKey, lat, lng) {
     var platform = new H.service.Platform({
@@ -79,8 +89,9 @@ function initWeather(coordinates) {
         success: function (response) {
             getWeatherFromLocation(response);
             sessionStorage.setItem("location", response.location.name);
+            sessionStorage.setItem("coords", JSON.stringify({lat: response.location.lat, lng: response.location.lon}));
         },
-        error: function (xhr, status, error) {
+        error: function (status, error) {
             console.error("Error:", status, error);
         }
     });
@@ -143,7 +154,7 @@ function getForecast(location) {
                     console.log(response.message);
                 },
                 error: function (response) {
-                    alert("Error encountered while saving forecast")
+                    console.log(response.message)
                 }
 
             });
@@ -151,7 +162,7 @@ function getForecast(location) {
     }
 
 }
-function checkHistory(location, callback) {
+function checkHistory(location) {
     const currentTime = new Date();
     const currentMinutes = currentTime.getMinutes();
 
@@ -159,6 +170,7 @@ function checkHistory(location, callback) {
     if (currentMinutes >= 30) {
         timeNow += 1;
     }
+    timeNow = Math.min(timeNow,23);
     const formattedDate = new Date(currentTime);
     formattedDate.setDate(formattedDate.getDate() - 1);
     const yesterdayDate = formattedDate.toISOString().split('T')[0];
@@ -180,13 +192,13 @@ function checkHistory(location, callback) {
 function checkYesterdayTemperature(forecastResponse, timeNow) {
     const yesterdayForecast = forecastResponse.forecast;
 
-    const closestHour = yesterdayForecast.find(hour => {
-        const [forecastHour, forecastMinute] = hour.time.split(':').map(Number);
+    const closestHour = yesterdayForecast.find(forecastHourData => {
+        const [forecastHour] = forecastHourData.hour.split(':').map(Number);
         return forecastHour === timeNow
     })
 
     if (closestHour) {
-        const temperatureYesterday = closestHour.temp_c;
+        const temperatureYesterday = closestHour.temperature;
         document.getElementById('yesterday').textContent = "Yesterday at this time was " + temperatureYesterday +" °" ;
         
     } else {
