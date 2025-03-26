@@ -34,7 +34,7 @@ public class WeatherService {
                         .queryParam("q", query)
                         .build())
                 .retrieve()
-                .onStatus(HttpStatusCode::isError, clientResponse -> Mono.error(new InternalServerException("Api error")))
+                .onStatus(HttpStatusCode::isError, clientResponse -> Mono.error(new InternalServerException("Weather API error")))
                 .bodyToMono(WeatherResponse.class);
     }
 
@@ -50,7 +50,7 @@ public class WeatherService {
                         .build())
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, clientResponse ->
-                        Mono.error(new InternalServerException("Forecast error")))
+                        Mono.error(new InternalServerException("Forecast  API error")))
                 .bodyToMono(ForecastResponse.class)
                 .map(this::mapResponseToForecast);
 

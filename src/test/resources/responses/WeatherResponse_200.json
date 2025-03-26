@@ -1,13 +1,15 @@
 {
     "location": {
-        "name": "Warsaw"
+        "name": "Warsaw",
+        "lat": "52.25",
+        "lon": "21.0"
     },
     "current": {
-        "temp_c": 7.3,
-        "feelslike_c": 5.4,
+        "temp_c": 13.4,
+        "feelslike_c": 12.7,
         "wind_kph": 10.1,
-        "pressure_mb": 1028.0,
-        "humidity": 49,
+        "pressure_mb": 1016.0,
+        "humidity": 54,
         "cloud": 0
     }
 }
