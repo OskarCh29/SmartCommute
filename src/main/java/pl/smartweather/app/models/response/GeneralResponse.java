@@ -1,4 +1,4 @@
-package pl.smartCommute.app.models.response;
+package pl.smartweather.app.models.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

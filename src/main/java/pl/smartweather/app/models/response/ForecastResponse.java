@@ -1,10 +1,8 @@
-package pl.smartCommute.app.models.response;
+package pl.smartweather.app.models.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
-import pl.smartCommute.app.models.entity.Forecast.Forecast;
-import pl.smartCommute.app.models.entity.Forecast.ForecastInformation;
 
 import java.util.List;
 

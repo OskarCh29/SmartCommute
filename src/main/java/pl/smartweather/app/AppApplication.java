@@ -1,4 +1,4 @@
-package pl.smartCommute.app;
+package pl.smartweather.app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

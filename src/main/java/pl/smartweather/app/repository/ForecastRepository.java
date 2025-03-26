@@ -1,8 +1,8 @@
-package pl.smartCommute.app.repository;
+package pl.smartweather.app.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
-import pl.smartCommute.app.models.entity.Forecast.Forecast;
+import pl.smartweather.app.models.entity.Forecast;
 
 import java.util.Optional;
 

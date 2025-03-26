@@ -1,15 +1,15 @@
-package pl.smartCommute.app.service;
+package pl.smartweather.app.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import pl.smartCommute.app.exception.InternalServerException;
-import pl.smartCommute.app.models.entity.Forecast.Forecast;
-import pl.smartCommute.app.models.entity.Forecast.ForecastInformation;
-import pl.smartCommute.app.models.response.ForecastResponse;
-import pl.smartCommute.app.models.response.WeatherResponse;
+import pl.smartweather.app.exception.InternalServerException;
+import pl.smartweather.app.models.entity.Forecast;
+import pl.smartweather.app.models.entity.ForecastInformation;
+import pl.smartweather.app.models.response.ForecastResponse;
+import pl.smartweather.app.models.response.WeatherResponse;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public class WeatherService {
                         .queryParam("q", query)
                         .build())
                 .retrieve()
-                .onStatus(HttpStatusCode::isError, clientResponse -> Mono.error(new InternalServerException("Api error")))
+                .onStatus(HttpStatusCode::isError, clientResponse -> Mono.error(new InternalServerException("Weather API error")))
                 .bodyToMono(WeatherResponse.class);
     }
 
@@ -50,7 +50,7 @@ public class WeatherService {
                         .build())
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, clientResponse ->
-                        Mono.error(new InternalServerException("Forecast error")))
+                        Mono.error(new InternalServerException("Forecast API error")))
                 .bodyToMono(ForecastResponse.class)
                 .map(this::mapResponseToForecast);
 

@@ -1,3 +1,5 @@
 spring:
   main:
     banner-mode: false
+security:
+  API_KEY: API_KEY

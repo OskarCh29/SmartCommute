@@ -1,4 +1,4 @@
-package pl.smartCommute.app.exception;
+package pl.smartweather.app.exception;
 
 public class InternalServerException extends RuntimeException {
     public InternalServerException(String message) {

@@ -1,4 +1,4 @@
-package pl.smartCommute.app.models.entity.Forecast;
+package pl.smartweather.app.models.entity;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
