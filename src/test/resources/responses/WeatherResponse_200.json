@@ -1,0 +1,13 @@
+{
+    "location": {
+        "name": "Warsaw"
+    },
+    "current": {
+        "temp_c": 7.3,
+        "feelslike_c": 5.4,
+        "wind_kph": 10.1,
+        "pressure_mb": 1028.0,
+        "humidity": 49,
+        "cloud": 0
+    }
+}

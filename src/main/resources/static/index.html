@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Commute</title>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+    <script src="scripts/jquery-3.7.1.js"></script>
+    <link rel="stylesheet" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
+    <link rel="stylesheet" href="style/style.css">
+</head>
+
+<body>
+    <div id="map"></div>
+    <div id="weather-info">
+        <div class="location" id="location">Location: Loading...</div>
+        <div class="date" id="date">Date & Time: Loading...</div>
+        <div class="info">
+            <div>
+                <h4>Temperature</h4>
+                <p id="temp">Loading...</p>
+            </div>
+            <div>
+                <h4>Feels like</h4>
+                <p id="feelsLike">Loading...</p>
+            </div>
+            <div>
+                <h4>Wind</h4>
+                <p id="wind">Loading...</p>
+            </div>
+            <div>
+                <h4>Pressure</h4>
+                <p id="pressure">Loading...</p>
+            </div>
+            <div>
+                <h4>Humidity</h4>
+                <p id="humidity">Loading...</p>
+            </div>
+            <div>
+                <h4>Cloud</h4>
+                <p id="cloud">Loading...</p>
+            </div>
+        </div>
+
+        <p id="yesterday" class="pred"></p>
+    </div>
+    <div id="weather-data">
+        <div class="data">
+            <div>
+                <button type="submit" id="getForecast">Check next day forecast</button>
+            </div>
+            <div></div>
+        </div>
+    </div>
+    <script src="scripts/weatherInfoScript.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#getForecast").click(function (e) {
+                e.preventDefault();
+                window.location.href = "/weatherForecast.html";
+            });
+        });
+    </script>
+</body>
+
+</html>

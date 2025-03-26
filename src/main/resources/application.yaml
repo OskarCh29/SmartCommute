@@ -5,7 +5,9 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017/history
 weather:
-  url: http://api.weatherapi.com/v1/current.json?key=${WEATHER_KEY}
-mapData:
-  url:
+  url: http://api.weatherapi.com
+security:
+  API_KEY: ${WEATHER_KEY}
+
+
 

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily forecast</title>
+    <script src="scripts/jquery-3.7.1.js"></script>
+    <link rel="stylesheet" href="style/style.css">
+</head>
+<body>
+    <div class= "weather-conteiner">
+        <h1>Weather forecast</h1>
+        <p id="location">Location: Loading...</p>
+        <p id="date">Today: Loading...</p>
+        <p>Weather Forecast:</p>
+    </div>
+    <button id="back">Back</button>
+    <table id="forecast-table">
+        <thead>
+            <tr>
+                <th>Hour</th>
+                <th>Temperature (°)</th>
+                <th>Feels like (°) </th>
+                <th>Pressure(hPa)</th>
+                <th>Wind(km/h)</th>
+                <th>Cloud(%)</th>
+                <th>Rain(%)</th>
+                <th>Humidity(%)</th>
+            </tr>
+        </thead>
+        <tbody id="forecast">
+
+        </tbody>
+    </table>
+    <script src="/scripts/forecastScript.js"></script>
+    
+</body>
+</html>

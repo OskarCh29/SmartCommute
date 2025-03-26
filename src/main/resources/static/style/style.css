@@ -1,0 +1,86 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, sans-serif;
+}
+
+#map {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: calc(100% - 210px);
+}
+
+#weather-info {
+    background-color: rgb(34, 69, 243);
+    padding: 20px;
+    color: #fff;
+    text-align: center;
+}
+
+#weather-info .location {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#weather-info .date {
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+#weather-info .info {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    font-size: 14px;
+}
+
+#weather-info .info div {
+    background-color: #1a4e8c;
+    padding: 10px;
+    border-radius: 4%;
+    text-align: center;
+}
+
+#weather-info .info div h4 {
+    margin: 0;
+    font-size: 12px;
+}
+
+#weather-info .info div p {
+    margin: 5px 0;
+}
+#weather-data .data div{
+    background-color: rgb(34, 69, 243);
+}
+.weather-conteiner{
+    text-align: center;
+    margin-top: 30px;
+}
+#forecast-table{
+    margin: 30px auto;
+}
+#forecast-table th, #forecast-table td{
+    padding: 10px;
+    text-align: center;
+    border: 1px solid rgb(0, 0, 0);
+}
+button{
+    cursor: pointer;
+}
+#back{
+    padding: 10px;
+}
+#saveForecast{
+    padding: 10px;
+}
+.pred{
+    text-align: left;
+    font-size: 12px ;
+    margin: 0px;
+    padding: 0px;
+    font-weight: bold;
+    
+}
